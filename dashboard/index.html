@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div>
+      <p class="kicker">Token launch radar</p>
+      <h1>Which protocol's token would be worth the most?</h1>
+      <p class="lede">Every protocol below records no token yet. Each row's implied value is the
+      radar's own claim, from the protocol's TVL, its seven-day growth and how long it has run
+      with no token — never from a list of names. Click a row for its model maths and farm plan.</p>
+    </div>
+    <dl class="stats" id="stats"></dl>
+  </div>
+</header>
+
+<main>
+  <section class="controls" aria-label="Filter and sort the board">
+    <label>Search <input id="q" type="search" placeholder="Protocol name or slug" autocomplete="off"></label>
+    <label>Category
+      <select id="cat"><option value="">All categories</option></select>
+    </label>
+    <label>Chain
+      <select id="chain"><option value="">All chains</option></select>
+    </label>
+    <label>Sort by
+      <select id="sort">
+        <option value="rank">Implied value (rank)</option>
+        <option value="tvl">TVL</option>
+        <option value="growth">7-day growth</option>
+        <option value="age">Age (oldest first)</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </label>
+    <label class="check"><input id="watch" type="checkbox"> Watchlist only</label>
+    <button id="reset" type="button">Reset</button>
+  </section>
+
+  <p class="count" id="count" aria-live="polite"></p>
+
+  <section class="detail" id="detail" hidden>
+    <div class="detail-head">
+      <h2 id="d-name"></h2>
+      <button id="d-close" type="button" aria-label="Close detail">×</button>
+    </div>
+    <dl class="d-grid" id="d-grid"></dl>
+    <h3>How the value is built</h3>
+    <p class="mono" id="d-model"></p>
+    <h3>Farm plan</h3>
+    <ol class="steps" id="d-steps"></ol>
+  </section>
+
+  <div class="table-wrap">
+    <table id="board">
+      <thead>
+        <tr>
+          <th data-k="rank">#</th>
+          <th data-k="name">Protocol</th>
+          <th data-k="category">Category</th>
+          <th data-k="chains">Chains</th>
+          <th data-k="tvl" class="num">TVL</th>
+          <th data-k="growth" class="num">7d</th>
+          <th data-k="age" class="num">Age</th>
+          <th data-k="value" class="num">Implied value</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <section class="live">
+    <h2>Already trading — not ranked</h2>
+    <p>These protocols already have a token, so the board shows the market's own value for them
+    instead of a model's. A token that trades is not a launch to farm.</p>
+    <div class="table-wrap">
+      <table id="live-table">
+        <thead>
+          <tr><th>Protocol</th><th>Category</th><th class="num">TVL</th><th class="num">Market cap</th><th class="num">7d</th></tr>
+        </thead>
+        <tbody id="live-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="model-note">
+    <h2>The model, in full (radar-2)</h2>
+    <p><code>implied = TVL × category multiple × growth × maturity × breadth × young discount</code></p>
+    <ul>
+      <li><strong>Category multiple:</strong> exchanges and derivatives 0.38, lending and CDP 0.36,
+      yield and farming 0.32, RWA and basis trading 0.30, curators and allocators 0.28, staking 0.24,
+      anything else 0.18. A dollar of TVL is worth more where the protocol takes a fee.</li>
+      <li><strong>Growth:</strong> 1 + 0.6 × seven-day change, clamped to −50%…+200% (0.70–2.20).</li>
+      <li><strong>Maturity:</strong> 0.70 + age ÷ 1460 days × 0.50 (0.70–1.20); unknown age scores 0.90.
+      A protocol that has run for years with no token is overdue one. Under 90 days old, × 0.80.</li>
+      <li><strong>Breadth:</strong> 1 + 0.02 per extra chain, up to 8 (1.00–1.16).</li>
+      <li><strong>Scope:</strong> the board ranks every pre-token protocol the watchlist rule keeps —
+      the 40 watchlist slugs and every other one that is not a wrapped, staked or bridged product of
+      a token that already trades. Wrapped and staked products (WBTC, staked ETH, bridged USDT) are
+      excluded, because their token already exists.</li>
+    </ul>
+    <p class="fine" id="source-line"></p>
+  </section>
+</main>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
