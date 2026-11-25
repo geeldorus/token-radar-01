@@ -1,7 +1,7 @@
 // Token radar entry (Node 22, standard library only).
 //
 // Reads the sealed snapshot at /input/snapshot.json (or --input <file|dir>), scores every
-// pre-token protocol the watchlist rule keeps with the radar-2 model in lib/model.ts, writes the
+// pre-token protocol the watchlist rule keeps with the radar-3 model in lib/model.ts, writes the
 // ranked board to /output/board.json and the dashboard's data to /output/data.js, copies
 // dashboard/ and screenshots/ to /output, and writes /output/dossier.json with the vendored
 // make.fun library, exactly as the scorer rebuilds it.
@@ -69,6 +69,8 @@ function copyFiles(from: string, to: string): string[] {
 }
 
 const dashFiles = copyFiles(join(here, 'dashboard'), join(out, 'dashboard'));
+// Screenshots are hand-rendered JPEGs, 300-350 KB each: three at the 512 KiB cap would push
+// the dossier past 1.5 MiB, and the judge reads the cover image from the dossier.
 const shots = copyFiles(join(here, 'screenshots'), join(out, 'screenshots'));
 if (shots.length < 3) {
   process.stderr.write(`token radar: screenshots/ holds ${shots.length} image${shots.length === 1 ? '' : 's'}: hand in 3, the board, a detail view and a filtered view\n`);
