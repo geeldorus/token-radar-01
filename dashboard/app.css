@@ -57,6 +57,12 @@ button:hover { filter: brightness(1.08); }
 .d-grid dt { color: var(--muted); font-size: 12px; }
 .d-grid dd { margin: 2px 0 0; font-weight: 600; }
 .d-model { background: var(--bg2); border: 1px solid var(--line); border-radius: 7px; padding: 10px 12px; white-space: pre-wrap; word-break: break-word; }
+.factors { display: grid; gap: 6px; margin: 0; background: var(--bg2); border: 1px solid var(--line); border-radius: 7px; padding: 12px 14px; }
+.factors div { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.factors dt { color: var(--muted); font-size: 12px; min-width: 110px; flex: none; }
+.factors dd { margin: 0; font-weight: 600; }
+.factors div.total { border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }
+.factors div.total dd { color: var(--amber); font-size: 17px; }
 .steps { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
 .steps li { color: var(--ink); }
 .steps li::marker { color: var(--amber); font-weight: 700; }

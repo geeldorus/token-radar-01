@@ -10,8 +10,6 @@
   }
   var rows = R.rows;
   var watch = new Set(R.watchlist || []);
-  // The watchlist slugs are not in the data file; the board marks them from board.json's
-  // rank set instead — main.ts writes watchlist slugs into R.watchlist. Fall back gracefully.
   var bySlug = {};
   rows.forEach(function (r) { bySlug[r.slug] = r; });
 
@@ -135,12 +133,19 @@
       '<div><dt>Age with no token</dt><dd>' + age + '</dd></div>' +
       '<div><dt>Listed</dt><dd>' + esc(r.listed_at || '—') + '</dd></div>' +
       '<div><dt>Status</dt><dd>Records no token</dd></div>';
-    $('d-model').textContent =
-      'TVL ' + money(r.tvl_usd) + ' × category ' + r.category_multiple.toFixed(2) +
-      ' × growth ' + r.growth_multiplier.toFixed(2) +
-      ' × maturity ' + r.maturity_multiplier.toFixed(2) +
-      ' × breadth ' + r.breadth_multiplier.toFixed(2) +
-      ' = ' + money(r.implied_value_usd) + ' implied value.';
+    var growthTxt = r.change_7d === null ? 'not reported' :
+      (r.change_7d > 0 ? '+' : '') + r.change_7d.toFixed(1) + '% over 7 days';
+    var chainCount = (r.chains || []).length;
+    var youngTxt = r.young_discount < 1 ? 'under 90 days old → × ' + r.young_discount.toFixed(2) : '× 1.00';
+    $('d-factors').innerHTML =
+      '<div><dt>Size base</dt><dd>' + money(r.tvl_base_usd) + ' — TVL ' + money(r.tvl_usd) +
+      ' through its cube root, anchored at $1B</dd></div>' +
+      '<div><dt>Category</dt><dd>× ' + r.category_multiple.toFixed(2) + ' — ' + esc(r.category || 'uncategorised') + '</dd></div>' +
+      '<div><dt>Growth</dt><dd>× ' + r.growth_multiplier.toFixed(2) + ' — ' + growthTxt + '</dd></div>' +
+      '<div><dt>Maturity</dt><dd>× ' + r.maturity_multiplier.toFixed(2) + ' — ' + age + ' with no token</dd></div>' +
+      '<div><dt>Breadth</dt><dd>× ' + r.breadth_multiplier.toFixed(2) + ' — ' + chainCount + ' chain' + (chainCount === 1 ? '' : 's') + '</dd></div>' +
+      '<div><dt>Young discount</dt><dd>' + youngTxt + '</dd></div>' +
+      '<div class="total"><dt>Implied value</dt><dd>' + money(r.implied_value_usd) + '</dd></div>';
     $('d-steps').innerHTML = (r.farm_steps || []).map(function (s) {
       return '<li>' + esc(s) + '</li>';
     }).join('');

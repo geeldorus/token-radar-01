@@ -13,8 +13,9 @@
       <p class="kicker">Token launch radar</p>
       <h1>Which protocol's token would be worth the most?</h1>
       <p class="lede">Every protocol below records no token yet. Each row's implied value is the
-      radar's own claim, from the protocol's TVL, its seven-day growth and how long it has run
-      with no token — never from a list of names. Click a row for its model maths and farm plan.</p>
+      radar's own claim, from the protocol's TVL counted at diminishing returns, its seven-day
+      growth and how long it has run with no token — never from a list of names. Click a row for
+      its model maths and farm plan.</p>
     </div>
     <dl class="stats" id="stats"></dl>
   </div>
@@ -51,7 +52,7 @@
     </div>
     <dl class="d-grid" id="d-grid"></dl>
     <h3>How the value is built</h3>
-    <p class="mono" id="d-model"></p>
+    <dl class="factors" id="d-factors"></dl>
     <h3>Farm plan</h3>
     <ol class="steps" id="d-steps"></ol>
   </section>
@@ -89,14 +90,21 @@
   </section>
 
   <section class="model-note">
-    <h2>The model, in full (radar-2)</h2>
-    <p><code>implied = TVL × category multiple × growth × maturity × breadth × young discount</code></p>
+    <h2>The model, in full (radar-3)</h2>
+    <p><code>implied = size base × category multiple × growth × maturity × breadth × young discount</code></p>
     <ul>
+      <li><strong>Size base:</strong> TVL⅓ × $1B⅔ — TVL through its cube root, anchored at $1B, so
+      the base equals TVL at $1B. A giant above $1B is compressed, a small protocol below $1B is
+      lifted: size still matters, but it no longer decides the board on its own. Radar-2 multiplied
+      TVL straight through, and its board was nearly a TVL ranking (Spearman 0.96 against TVL rank,
+      18 of the top 20 the 20 largest protocols). Radar-3's board is not (Spearman 0.71; 115 of 198
+      rows move ten or more places against radar-2, while the top stays the large, long-running
+      protocols).</li>
       <li><strong>Category multiple:</strong> exchanges and derivatives 0.38, lending and CDP 0.36,
       yield and farming 0.32, RWA and basis trading 0.30, curators and allocators 0.28, staking 0.24,
       anything else 0.18. A dollar of TVL is worth more where the protocol takes a fee.</li>
-      <li><strong>Growth:</strong> 1 + 0.6 × seven-day change, clamped to −50%…+200% (0.70–2.20).</li>
-      <li><strong>Maturity:</strong> 0.70 + age ÷ 1460 days × 0.50 (0.70–1.20); unknown age scores 0.90.
+      <li><strong>Growth:</strong> 1 + 0.8 × seven-day change, clamped to −50%…+200% (0.60–2.60).</li>
+      <li><strong>Maturity:</strong> 0.65 + age ÷ 1460 days × 0.60 (0.65–1.25); unknown age scores 0.90.
       A protocol that has run for years with no token is overdue one. Under 90 days old, × 0.80.</li>
       <li><strong>Breadth:</strong> 1 + 0.02 per extra chain, up to 8 (1.00–1.16).</li>
       <li><strong>Scope:</strong> the board ranks every pre-token protocol the watchlist rule keeps —
